@@ -3,7 +3,7 @@ import { showItem, hideItem } from './utilities';
 
 const clientId =
   '917089682947-af68qq1cqr1es6hbrprjc78v6876h4at.apps.googleusercontent.com';
-const redirectUri = 'http://localhost:9000/';
+const redirectUri = 'https://ptakpatryk.github.io/Gallery_GPhotos/';
 
 export const login = () => {
   const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&scope=https://www.googleapis.com/auth/photoslibrary&client_id=${clientId}&redirect_uri=${redirectUri}&login_hint=patrickbird330@gmail.com`;
@@ -14,6 +14,7 @@ export const login = () => {
 export const logout = () => {
   sessionStorage.clear();
   checkTokenAvailability();
+  domElements.content.innerHTML = '';
 };
 
 export const checkTokenAvailability = () => {
