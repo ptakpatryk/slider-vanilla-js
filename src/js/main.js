@@ -54,7 +54,6 @@ const submitPhoto = (e) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        albumId: `AI-ucokl5vk2DNOpKYIbolTHJpXbLziPIXYASCpaDcrsBOChSeTD8220S4KXSzxkFYYvYZx7IYUf`,
         newMediaItems: [
           {
             description: 'photoDescription',
