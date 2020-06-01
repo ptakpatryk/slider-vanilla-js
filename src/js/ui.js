@@ -2,7 +2,6 @@ import * as DOM from './domElements';
 import { showItem, hideItem } from './utilities';
 
 export const updateAlbumList = (container, list, openAlbumFn) => {
-  console.log(container);
   const content = list.map(
     (el) =>
       `<figure class='album'>
@@ -20,9 +19,7 @@ export const updateAlbumList = (container, list, openAlbumFn) => {
   const albumsList = document.querySelectorAll('.album figcaption');
   albumsList.forEach((el) => {
     el.addEventListener('click', () => openAlbumFn(el.dataset.id));
-    console.log(el.dataset.id);
   });
-  console.log(albumsList);
 };
 
 export const updateGalleryItems = (container, list) => {
