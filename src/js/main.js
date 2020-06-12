@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { generateImageUrl } from './utilities';
+import { generateImageUrl, toggleClass } from './utilities';
+import * as UI from './ui';
 import '../style/style.scss';
+import * as domElements from './domElements';
 
 const API_KEY = 'cf869541db12017a0e8275066d961842';
 
@@ -30,3 +32,15 @@ const getAlbum = () => {
 };
 
 getAlbum();
+
+console.log(domElements.categoryButtons);
+
+// domElements.categoryButtons.forEach((el) =>
+//   el.addEventListener('click', () =>
+//     toggleClass(el, 'categories__item--active')
+//   )
+// );
+
+domElements.categoryButtons.forEach((el) =>
+  el.addEventListener('click', UI.updateCattegoryClass)
+);
