@@ -1,100 +1,32 @@
+import axios from 'axios';
+import { generateImageUrl } from './utilities';
 import '../style/style.scss';
-import { checkTokenAvailability, login, getToken, logout } from './auth';
-import * as UI from './ui';
-import * as domElements from './domElements';
-import { showItem, hideItem } from './utilities';
 
-checkTokenAvailability();
+const API_KEY = 'cf869541db12017a0e8275066d961842';
 
-const token = getToken();
+function parseXml(xmlStr) {
+  return new window.DOMParser().parseFromString(xmlStr, 'text/xml');
+}
 
-const getAlbums = () => {
-  UI.setSpinner(domElements.content);
-  fetch(`https://photoslibrary.googleapis.com/v1/albums`, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => res.json())
+let photosInitUrl;
+
+const getAlbum = () => {
+  axios
+    .get(
+      `https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=${API_KEY}&gallery_id=72157655899998382`
+    )
+    .then((res) => parseXml(res.data))
     .then((response) => {
-      UI.updateAlbumList(domElements.content, response.albums, openAlbum);
+      const photos = Array.from(response.querySelectorAll('photo'));
+      photosInitUrl = photos.map(
+        ({ attributes: { id, secret, server } }) =>
+          `https://live.staticflickr.com/${server.nodeValue}/${id.nodeValue}_${secret.nodeValue}`
+      );
+      const smallImages = photosInitUrl.map((el) =>
+        generateImageUrl(el, 'normal')
+      );
     })
-    .catch((err) => console.error(err));
+    .catch((err) => console.log(err));
 };
 
-const openAlbum = (albumId) => {
-  UI.setSpinner(domElements.content);
-  fetch(`https://photoslibrary.googleapis.com/v1/mediaItems:search`, {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      pageSize: '100',
-      albumId,
-    }),
-  })
-    .then((res) => res.json())
-    .then((response) => {
-      UI.updateGalleryItems(domElements.content, response.mediaItems, albumId);
-    })
-    .catch((err) => console.error(err));
-};
-
-const submitPhoto = (e) => {
-  e.preventDefault();
-  const sendMediaToPhotos = (uploadToken) => {
-    fetch('https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        newMediaItems: [
-          {
-            description: 'photoDescription',
-            simpleMediaItem: {
-              fileName: 'filename',
-              uploadToken: uploadToken,
-            },
-          },
-        ],
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-  };
-
-  const sendBinaryMedia = (binaryMedia, mimeType) => {
-    fetch('https://photoslibrary.googleapis.com/v1/uploads', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/octet-stream',
-        Authorization: `Bearer ${token}`,
-        'X-Goog-Upload-Content-Type': mimeType,
-        'X-Goog-Upload-Protocol': 'raw',
-      },
-      body: binaryMedia,
-    })
-      .then((res) => res.text())
-      .then((uploadToken) => {
-        sendMediaToPhotos(uploadToken);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const file = domElements.submitPhotoInput.files[0];
-  file.arrayBuffer().then((binaryMediaRes) => {
-    sendBinaryMedia(binaryMediaRes, file.type);
-  });
-};
-
-domElements.submitPhoto.addEventListener('click', submitPhoto);
-domElements.btnLogin.addEventListener('click', login);
-domElements.btnLogout.addEventListener('click', logout);
-domElements.btnFetch.addEventListener('click', getAlbums);
+getAlbum();
