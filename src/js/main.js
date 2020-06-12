@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { generateImageUrl, toggleClass } from './utilities';
+import { generateImageUrl } from './utilities';
+import { sliderInit, changePage } from './slider';
 import * as UI from './ui';
 import '../style/style.scss';
 import * as domElements from './domElements';
@@ -10,37 +11,38 @@ function parseXml(xmlStr) {
   return new window.DOMParser().parseFromString(xmlStr, 'text/xml');
 }
 
-let photosInitUrl;
+export const state = {
+  photosInitUrl: [],
+};
 
 const getAlbum = () => {
+  UI.setSpinner(domElements.spinner);
+
   axios
     .get(
       `https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=${API_KEY}&gallery_id=72157655899998382`
     )
     .then((res) => parseXml(res.data))
     .then((response) => {
+      UI.setSpinner(domElements.spinner, true);
       const photos = Array.from(response.querySelectorAll('photo'));
-      photosInitUrl = photos.map(
+      state.photosInitUrl = photos.map(
         ({ attributes: { id, secret, server } }) =>
           `https://live.staticflickr.com/${server.nodeValue}/${id.nodeValue}_${secret.nodeValue}`
       );
-      const smallImages = photosInitUrl.map((el) =>
-        generateImageUrl(el, 'normal')
-      );
+      UI.initCurrentImage(generateImageUrl(state.photosInitUrl[0], 'xLarge'));
+
+      sliderInit();
     })
     .catch((err) => console.log(err));
 };
 
 getAlbum();
 
-console.log(domElements.categoryButtons);
-
-// domElements.categoryButtons.forEach((el) =>
-//   el.addEventListener('click', () =>
-//     toggleClass(el, 'categories__item--active')
-//   )
-// );
-
 domElements.categoryButtons.forEach((el) =>
   el.addEventListener('click', UI.updateCattegoryClass)
 );
+domElements.sliderControls.forEach((el) =>
+  el.addEventListener('click', (e) => changePage(e.currentTarget.classList[1]))
+);
+domElements.sliderContent.addEventListener('click', UI.updateCurrentImage);

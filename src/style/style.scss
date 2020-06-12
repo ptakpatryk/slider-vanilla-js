@@ -92,9 +92,11 @@ nav {
     background-repeat: no-repeat;
     background-position: center center;
     transition: transform 0.15s ease-in-out;
+    z-index: 99;
 
     &:hover {
       transform: scale(1.1);
+      cursor: pointer;
     }
 
     &:not(:last-of-type),
@@ -106,9 +108,28 @@ nav {
   &__controls {
     position: absolute;
     top: 50%;
+    transform: translateY(-50%);
     width: 100%;
     display: flex;
     justify-content: space-between;
+
+    &__item {
+      background: transparent;
+      border: none;
+      outline: none;
+
+      svg {
+        width: 30px;
+        height: 30px;
+        transition: transform 0.3s ease-in-out;
+
+        &:hover,
+        &:focus {
+          cursor: pointer;
+          transform: scale(1.15);
+        }
+      }
+    }
   }
 }
 
