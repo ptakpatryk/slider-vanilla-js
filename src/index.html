@@ -7,30 +7,44 @@
   </head>
 
   <body>
-    <nav>Gallery</nav>
+    <nav><h1 class="logo"><span>Custom</span>nite</h1></nav>
+    <div class="spinner">
+      <div class='sk-circle'>
+        <div class='sk-circle1 sk-child'></div>
+        <div class='sk-circle2 sk-child'></div>
+        <div class='sk-circle3 sk-child'></div>
+        <div class='sk-circle4 sk-child'></div>
+        <div class='sk-circle5 sk-child'></div>
+        <div class='sk-circle6 sk-child'></div>
+        <div class='sk-circle7 sk-child'></div>
+        <div class='sk-circle8 sk-child'></div>
+        <div class='sk-circle9 sk-child'></div>
+        <div class='sk-circle10 sk-child'></div>
+        <div class='sk-circle11 sk-child'></div>
+        <div class='sk-circle12 sk-child'></div>
+      </div>
+    </div>
     <div class="wrapper">
       <section class="gallery">
         <div class="categories">
           <div
             class="categories__item categories__item--active"
-            data-id="livingrom"
+            data-id="72157714684197443"
           >
             <p>LIVINGROOM</p>
           </div>
-          <div class="categories__item" data-id="kitchen">
+          <div class="categories__item" data-id="72157714708565803">
             <p>KITCHEN</p>
           </div>
-          <div class="categories__item" data-id="bedroom">
+          <div class="categories__item" data-id="72157714684197443">
             <p>BEDROOM</p>
           </div>
         </div>
-        <div class="spinner"></div>
-        <div
-          class="currentImage"
-          style="
-            background-image: url(https://source.unsplash.com/random/1200x1200);
-          "
-        ></div>
+        
+        <div class="currentImage">
+          <div class="rectangle rectangle__one"></div>
+          <div class="rectangle rectangle__two"></div>
+        </div>
         <div class="slider">
           <div class="slider__controls">
             <button class="slider__controls__item prev">
@@ -62,57 +76,68 @@
               </svg>
             </button>
           </div>
-          <div class="slider__photos">
-            <div
-              class="slider__photo"
-              style="
-                background-image: url(https://source.unsplash.com/random/200x200);
-              "
-            ></div>
-            <div
-              class="slider__photo"
-              style="
-                background-image: url(https://source.unsplash.com/random/200x200);
-              "
-            ></div>
-            <div
-              class="slider__photo"
-              style="
-                background-image: url(https://source.unsplash.com/random/200x200);
-              "
-            ></div>
-            <div
-              class="slider__photo"
-              style="
-                background-image: url(https://source.unsplash.com/random/200x200);
-              "
-            ></div>
-            <div
-              class="slider__photo"
-              style="
-                background-image: url(https://source.unsplash.com/random/200x200);
-              "
-            ></div>
-
-            <!-- <img
-              class="slider__photo"
-              src="https://source.unsplash.com/random/200x200"
-            />
-            <img
-              class="slider__photo"
-              src="https://source.unsplash.com/random/200x200"
-            />
-            <img
-              class="slider__photo"
-              src="https://source.unsplash.com/random/200x200"
-            />
-            <img
-              class="slider__photo"
-              src="https://source.unsplash.com/random/200x200"
-            /> -->
+          <div class="slider__itemsWrapper">
+            <div class="slider__photos">
+              <div
+                class="slider__photo"
+                style="
+                  background-image: url(https://source.unsplash.com/random/200x200);
+                "
+              ></div>
+              <div
+                class="slider__photo"
+                style="
+                  background-image: url(https://source.unsplash.com/random/200x200);
+                "
+              ></div>
+              <div
+                class="slider__photo"
+                style="
+                  background-image: url(https://source.unsplash.com/random/200x200);
+                "
+              ></div>
+              <div
+                class="slider__photo"
+                style="
+                  background-image: url(https://source.unsplash.com/random/200x200);
+                "
+              ></div>
+              <div
+                class="slider__photo"
+                style="
+                  background-image: url(https://source.unsplash.com/random/200x200);
+                "
+              ></div>
+  
+           
+  
+              <!-- <img
+                class="slider__photo"
+                src="https://source.unsplash.com/random/200x200"
+              />
+              <img
+                class="slider__photo"
+                src="https://source.unsplash.com/random/200x200"
+              />
+              <img
+                class="slider__photo"
+                src="https://source.unsplash.com/random/200x200"
+              />
+              <img
+                class="slider__photo"
+                src="https://source.unsplash.com/random/200x200"
+              /> -->
           </div>
         </div>
       </section>
+      <div class="lightbox">
+        <div class="lightbox__image">
+          <div class="closeBtn">X</div>
+          <img class="lightbox__image__item" src="https://source.unsplash.com/random/1200x1200" />
+        </div>
+        <div class="backdrop">
+        </div>
+      </div>
     </div>
   </body>
 </html>

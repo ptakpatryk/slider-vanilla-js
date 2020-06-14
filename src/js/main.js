@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { generateImageUrl } from './utilities';
-import { sliderInit, changePage } from './slider';
+import {
+  sliderInit,
+  changePage,
+  updatePhotoWidth,
+  moveSlideOnKeydown,
+  updateItemsInSlider,
+} from './slider';
 import * as UI from './ui';
 import '../style/style.scss';
 import * as domElements from './domElements';
@@ -15,16 +21,16 @@ export const state = {
   photosInitUrl: [],
 };
 
-const getAlbum = () => {
-  UI.setSpinner(domElements.spinner);
+const getAlbum = (galleryId) => {
+  UI.setSpinner();
 
   axios
     .get(
-      `https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=${API_KEY}&gallery_id=72157655899998382`
+      `https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=${API_KEY}&gallery_id=${galleryId}`
     )
     .then((res) => parseXml(res.data))
     .then((response) => {
-      UI.setSpinner(domElements.spinner, true);
+      UI.setSpinner();
       const photos = Array.from(response.querySelectorAll('photo'));
       state.photosInitUrl = photos.map(
         ({ attributes: { id, secret, server } }) =>
@@ -37,12 +43,30 @@ const getAlbum = () => {
     .catch((err) => console.log(err));
 };
 
-getAlbum();
+// Init album
+getAlbum('72157714684197443');
 
-domElements.categoryButtons.forEach((el) =>
-  el.addEventListener('click', UI.updateCattegoryClass)
-);
+// Event Listeners
+domElements.categoryButtons.forEach((el) => {
+  el.addEventListener('click', UI.updateCattegoryClass);
+  el.addEventListener('click', (e) => getAlbum(e.target.parentNode.dataset.id));
+});
 domElements.sliderControls.forEach((el) =>
   el.addEventListener('click', (e) => changePage(e.currentTarget.classList[1]))
 );
 domElements.sliderContent.addEventListener('click', UI.updateCurrentImage);
+domElements.currentImage.addEventListener('click', (e) =>
+  UI.lightboxPhotoUpdate(e)
+);
+document.body.addEventListener('keydown', UI.hideLightboxOnKeydown);
+document.body.addEventListener('keydown', (e) => moveSlideOnKeydown(e));
+
+[domElements.ligthboxBackdrop, domElements.closeLightboxBtn].forEach((el) =>
+  el.addEventListener('click', UI.hideLightbox)
+);
+
+// update photo width and number of items in slider on resize
+window.addEventListener('resize', (e) => {
+  updatePhotoWidth();
+  updateItemsInSlider();
+});

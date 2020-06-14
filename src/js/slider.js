@@ -1,52 +1,55 @@
 import * as domElements from './domElements';
+import * as UI from './ui';
 import { state } from './main';
 import { generateImageUrl } from './utilities';
 import { updateSliderItems } from './ui';
 
 let currentPage = 1;
-const elementsPerPage = 5;
+let elementsPerPage = 5;
 let numberOfElements;
 let maxPages;
 
-export const sliderInit = () => {
-  numberOfElements = state.photosInitUrl.length;
-  maxPages = Math.floor(numberOfElements / elementsPerPage);
-
-  const items = state.photosInitUrl.map((el) => generateImageUrl(el, 'normal'));
-  const photosToShow = paginatePhotos(items, elementsPerPage, currentPage);
-  updateSliderItems(photosToShow, domElements.sliderContent);
+export const updatePhotoWidth = () => {
+  UI.changePhotoDisplay(elementsPerPage);
 };
 
-const paginatePhotos = (photos, numPerPage, page) => {
-  page--;
-
-  const start = numPerPage * page;
-  const end = start + numPerPage;
-
-  const paginatedPhotos = photos.slice(start, end);
-
-  return paginatedPhotos;
+export const sliderInit = () => {
+  numberOfElements = state.photosInitUrl.length;
+  const items = state.photosInitUrl.map((el) => generateImageUrl(el, 'normal'));
+  updateSliderItems(items, domElements.sliderContent);
+  updateItemsInSlider();
+  updatePhotoWidth();
 };
 
 export const changePage = (method) => {
   switch (method) {
     case 'next':
-      if (currentPage === maxPages) {
-        currentPage = 1;
-      } else {
-        currentPage++;
-      }
-      sliderInit();
+      UI.moveSlide('next', elementsPerPage);
       break;
     case 'prev':
-      if (currentPage === 1) {
-        currentPage = maxPages;
-      } else {
-        currentPage--;
-      }
-      sliderInit();
+      UI.moveSlide('prev', elementsPerPage);
       break;
     default:
       return;
+  }
+};
+
+export const moveSlideOnKeydown = (e) => {
+  if (e.keyCode === 39) {
+    changePage('next');
+  }
+  if (e.keyCode === 37) {
+    changePage('prev');
+  }
+};
+
+export const updateItemsInSlider = () => {
+  if ((window.innerWidth < 500) & (elementsPerPage !== 3)) {
+    elementsPerPage = 3;
+    updatePhotoWidth();
+  }
+  if ((window.innerWidth > 500) & (elementsPerPage === 3)) {
+    elementsPerPage = 5;
+    updatePhotoWidth();
   }
 };
